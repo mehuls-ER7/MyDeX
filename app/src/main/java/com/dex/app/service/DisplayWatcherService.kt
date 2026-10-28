@@ -45,6 +45,9 @@ class DisplayWatcherService : Service() {
         private const val PREF_LAST_PROMPTED_DISPLAY_ID = "last_prompted_display_id"
         const val ACTION_START_DEX = "com.dex.app.ACTION_START_DEX"
         const val ACTION_STOP_DEX = "com.dex.app.ACTION_STOP_DEX"
+        // Sent BY DesktopShellActivity when it finishes / its Presentation
+        // dies, so the service does not stay stuck in "already running".
+        const val ACTION_DEX_STOPPED = "com.dex.app.DEX_STOPPED"
         const val ACTION_SCAN_DISPLAYS = "com.dex.app.SCAN_DISPLAYS"
         const val EXTRA_DISPLAY_ID = "display_id"
         const val EXTRA_CONNECTION_TYPE = "connection_type"
@@ -55,6 +58,16 @@ class DisplayWatcherService : Service() {
             if (intent?.action == ACTION_SCAN_DISPLAYS) {
                 Log.d(TAG, "Received scan displays broadcast")
                 displayWatcher.scan()
+            }
+        }
+    }
+
+    private val stoppedReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == ACTION_DEX_STOPPED && isDexRunning) {
+                Log.d(TAG, "Desktop shell stopped, clearing isDexRunning so Start DeX works again")
+                isDexRunning = false
+                updateNotification(getString(R.string.dex_status_ready))
             }
         }
     }
@@ -78,8 +91,14 @@ class DisplayWatcherService : Service() {
                 IntentFilter(ACTION_SCAN_DISPLAYS),
                 RECEIVER_NOT_EXPORTED
             )
+            registerReceiver(
+                stoppedReceiver,
+                IntentFilter(ACTION_DEX_STOPPED),
+                RECEIVER_NOT_EXPORTED
+            )
         } else {
             registerReceiver(scanReceiver, IntentFilter(ACTION_SCAN_DISPLAYS))
+            registerReceiver(stoppedReceiver, IntentFilter(ACTION_DEX_STOPPED))
         }
 
         // Start display watching
@@ -121,6 +140,7 @@ class DisplayWatcherService : Service() {
         scope.coroutineContext[Job]?.cancel()
         displayWatcher.stop()
         unregisterReceiver(scanReceiver)
+        try { unregisterReceiver(stoppedReceiver) } catch (_: Exception) {}
         stopForeground(true)
         Log.d(TAG, "DisplayWatcherService destroyed")
         super.onDestroy()
@@ -318,12 +338,22 @@ class DisplayWatcherService : Service() {
         isDexRunning = true
         updateNotification(getString(R.string.dex_status_starting))
 
-        // Launch DesktopShell as a Presentation on the external display
-        val intent = Intent(this, DesktopShellActivity::class.java).apply {
-            putExtra(EXTRA_DISPLAY_ID, displayId)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        // Launch DesktopShell as a Presentation on the external display.
+        // If this throws (background-activity restriction, bad display),
+        // clear the flag immediately – otherwise every later Start DeX
+        // tap is silently ignored and the app looks dead.
+        try {
+            val intent = Intent(this, DesktopShellActivity::class.java).apply {
+                putExtra(EXTRA_DISPLAY_ID, displayId)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to start DesktopShellActivity on display $displayId", e)
+            isDexRunning = false
+            updateNotification(getString(R.string.dex_status_ready))
+            return
         }
-        startActivity(intent)
 
         Log.d(TAG, "Started DeX on display $displayId")
         updateNotification(getString(R.string.toast_dex_started))

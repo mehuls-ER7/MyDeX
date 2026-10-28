@@ -24,6 +24,12 @@
     <string name="wireless_guidance">कनेक्ट करने के बाद, बेहतर अनुभव के लिए ब्लूटूथ कीबोर्ड/माउस पेयर करें।</string>
     <string name="wireless_no_display">कोई एक्सटेंडेड डिस्प्ले नहीं मिला। आपका डिवाइस केवल मिररिंग सपोर्ट कर सकता है।</string>
 
+    <!-- Manual start (auto-trigger failed, user opened the app) -->
+    <string name="manual_choice_title">DeX मैन्युअली शुरू करें</string>
+    <string name="manual_choice_message">कोई डिस्प्ले अपने आप नहीं मिला। आपका डिस्प्ले कैसे कनेक्ट है?</string>
+    <string name="manual_wired">वायर्ड – फिर से स्कैन करें</string>
+    <string name="manual_wireless">वायरलेस – कास्ट स्क्रीन</string>
+
     <!-- Onboarding -->
     <string name="onboarding_title">DeX मोड सेटअप</string>
     <string name="onboarding_step_dev_options">डेवलपर ऑप्शन चालू करें</string>

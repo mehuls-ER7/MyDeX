@@ -24,6 +24,12 @@
     <string name="wireless_guidance">After connecting, ensure Bluetooth keyboard/mouse are paired for best experience.</string>
     <string name="wireless_no_display">No extended display detected. Your device may only support mirroring.</string>
 
+    <!-- Manual start (auto-trigger failed, user opened the app) -->
+    <string name="manual_choice_title">Start DeX manually</string>
+    <string name="manual_choice_message">No display was detected automatically. How is your display connected?</string>
+    <string name="manual_wired">Wired – Rescan</string>
+    <string name="manual_wireless">Wireless – Cast screen</string>
+
     <!-- Onboarding -->
     <string name="onboarding_title">Setup DeX Mode</string>
     <string name="onboarding_step_dev_options">Enable Developer Options</string>

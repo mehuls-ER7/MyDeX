@@ -2,6 +2,7 @@ package com.dex.app.ui
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
@@ -65,6 +66,10 @@ class DexConfirmationActivity : AppCompatActivity() {
             action = DisplayWatcherService.ACTION_START_DEX
             putExtra(DisplayWatcherService.EXTRA_DISPLAY_ID, displayId)
         }
-        startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
     }
 }

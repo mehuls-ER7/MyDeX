@@ -142,13 +142,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Set button click listener
+        // Set button click listener.
+        // Manual path (flowchart, purple branch): if no display is known
+        // yet, do NOT just jump to cast settings – offer Wired (rescan)
+        // and Wireless (cast screen), because auto-trigger failure is
+        // exactly the case where the user opens the app manually.
         btnAction.setOnClickListener {
             val display = displayWatcher.externalDisplay.value
             if (display != null) {
                 startDex(display.displayId)
             } else {
-                openWirelessCast()
+                showManualStartChoice()
             }
         }
     }
@@ -216,12 +220,52 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Started DisplayWatcherService")
     }
 
+    private fun showManualStartChoice() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.manual_choice_title)
+            .setMessage(R.string.manual_choice_message)
+            .setPositiveButton(R.string.manual_wired) { dialog, _ ->
+                dialog.dismiss()
+                rescanAndStartDex()
+            }
+            .setNegativeButton(R.string.manual_wireless) { dialog, _ ->
+                dialog.dismiss()
+                openWirelessCast()
+            }
+            .show()
+    }
+
+    private fun rescanAndStartDex() {
+        // Synchronous scan first, then ask the service to scan too.
+        // DisplayWatcher.scan() updates externalDisplay.value directly,
+        // so a display that auto-detection missed (delayed rescan, service
+        // killed, last-prompted flag) can still be found here.
+        displayWatcher.scan()
+        sendBroadcast(
+            Intent(DisplayWatcherService.ACTION_SCAN_DISPLAYS).setPackage(packageName)
+        )
+        val display = displayWatcher.externalDisplay.value
+        if (display != null) {
+            Log.d(TAG, "Manual rescan found display ${display.displayId}, starting DeX")
+            startDex(display.displayId)
+        } else {
+            Log.d(TAG, "Manual rescan found no external display")
+            Toast.makeText(this, R.string.wireless_no_display, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun startDex(displayId: Int) {
         val intent = Intent(this, DisplayWatcherService::class.java).apply {
             action = DisplayWatcherService.ACTION_START_DEX
             putExtra(DisplayWatcherService.EXTRA_DISPLAY_ID, displayId)
         }
-        startService(intent)
+        // startForegroundService (not startService) so a restart of a
+        // killed foreground service does not hit Android 12+ restrictions.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
         Toast.makeText(this, R.string.toast_dex_started, Toast.LENGTH_SHORT).show()
     }
 
