@@ -1,12 +1,58 @@
 # DeX App Milestone Status
 
-## Current Status: M1 - Desktop Environment (FIXED, AWAITING DEVICE RETEST)
+## Current Status: M2 - Custom Window Manager (CODE DONE, DEVICE RETEST PENDING)
 
-### Build Status: **CODE FIXED – NOT YET RE-VERIFIED ON DEVICE**
-M1 code built, but manual Start DeX crashed on device. Root cause found
-2026-10-28 (see "M1 manual-start crash fix" below) and fixed in code.
-M1 is NOT complete again until the retest steps below pass on a real
-device. Do not mark it COMPLETE on a compile alone.
+### Build Status: **CODE DONE – NOT YET RE-VERIFIED ON DEVICE**
+M1 fix was merged into main (merge commit 23daf5a, 2026-10-28) and M2
+is built on top of that main. As with M1, do not mark M2 COMPLETE on a
+compile alone – the retest steps under "M2 retest" below must pass on a
+real device first.
+
+### M2 – what was built (2026-10-28)
+All in `DesktopContentMinimal.kt` (no new dependencies, no layout/XML
+changes, no string changes – all M2 behaviour is in the window layer):
+1. **8-direction resize** (was: bottom-right corner only):
+   `resizeWindowFrom()` with `ResizeEdge` LEFT/RIGHT/TOP/BOTTOM +
+   4 corners. Left/top handles move the origin as well as the size,
+   clamped to 320×200 px minimum and x/y ≥ 0. Bottom-right behaviour
+   is unchanged, including its corner icon.
+2. **Windows-style snap + live preview**: dragging a window's title
+   bar within 48 px of an edge/corner shows a cyan preview rectangle;
+   on release (`endDrag`) it snaps – left/right = half screen,
+   corners = quarter screen, top = full desktop area above the
+   56 dp taskbar. Maximized windows do not snap. Dragging a snapped
+   window moves it as-is (no pre-snap size restore yet – noted
+   limitation, not a silent bug).
+3. **Window state persistence**: `WindowPersistence` (SharedPreferences
+   `dex_prefs`, `org.json`, no new library) saves open windows
+   (id, app, position, size, minimized, maximized, z-order) and the
+   focused window on every discrete action and on drag/resize end
+   (not per pixel). `DesktopContentMinimal` restores them
+   synchronously on first composition; windows for apps no longer in
+   the catalogue are dropped. So closing/reopening the desktop brings
+   back the same layout instead of an empty desktop.
+4. **Multi-window, already present, now exercised by the above**:
+   z-order/focus, minimize/maximize/close, taskbar running apps,
+   6 internal apps in simultaneous windows.
+Not in M2 (explicitly): snap preview while resizing (preview is drag
+only), pre-snap restore on drag, window tiling shortcuts, saved
+layouts beyond the last layout. Those belong to a later polish pass,
+not to a silent M2 claim.
+
+### M2 retest (do this before calling M2 complete)
+1. Rebuild in Android Studio, install, start DeX on an external display.
+2. Open 2 apps at once, drag one to the left edge → preview → release
+   → it must fill the left half; drag another to a corner → quarter.
+3. Drag a window to the top edge → full desktop area (not under the
+   taskbar); drag it back down → it moves freely again.
+4. Resize from all 8 handles, including left and top (window must
+   grow/shrink from that side, never below 320×200, never off the
+   top/left edge).
+5. Close the desktop, reopen it → the same windows, positions and
+   sizes must come back (persistence). Close a window, reopen →
+   it must NOT come back.
+6. If anything above fails, capture logcat first:
+   `adb logcat -d | findstr /C:"AndroidRuntime" /C:"DesktopShell"`
 
 ### M1 manual-start crash fix (2026-10-28)
 Symptom: M0 manual start worked; after the M1 Compose desktop landed,
@@ -113,11 +159,11 @@ README.md (build + logcat steps).
    - Open start menu from Start button
    - Test all 6 demo apps
 
-### M2 Deliverables (Planned)
-- Window snap to edges/corners (Windows-style)
-- Multi-window management improvements
-- More internal apps
-- Better window state persistence
+### M2 Deliverables (DONE IN CODE, see "M2 – what was built" above)
+- Window snap to edges/corners (Windows-style) ✓ code
+- Multi-window management improvements ✓ code
+- More internal apps – already 6 from M1, no new app added in M2
+- Better window state persistence ✓ code
 
 ### M3-M6 Planned
 - M3: Embedded ADB client + onboarding wizard
@@ -127,4 +173,4 @@ README.md (build + logcat steps).
 
 ---
 Last Updated: 2026-10-28
-Build Status: ⚠️ CODE FIXED, DEVICE RETEST PENDING
+Build Status: ⚠️ M2 CODE DONE, DEVICE RETEST PENDING
