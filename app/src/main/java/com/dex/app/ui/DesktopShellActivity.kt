@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -147,7 +148,7 @@ class DesktopShellActivity : ComponentActivity() {
             // M1: Full Compose desktop environment via ComposeView
             val composeView = ComposeView(context).apply {
                 // CRITICAL: Provide ViewTreeLifecycleOwner for ComposeView inside Presentation
-                androidx.lifecycle.ViewTreeLifecycleOwner.set(this, this@DesktopPresentation)
+                ViewTreeLifecycleOwner.set(this, this@DesktopPresentation)
                 setContent {
                     MaterialTheme {
                         Surface(
