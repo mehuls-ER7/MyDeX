@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">DeX मोड</string>
+    <string name="app_name_full">डेस्कटॉप अनुभव</string>
+
+    <!-- Main Screen -->
+    <string name="start_dex">DeX शुरू करें</string>
+    <string name="stop_dex">DeX बंद करें</string>
+    <string name="dex_status_ready">कनेक्ट होने के लिए तैयार</string>
+    <string name="dex_status_connected">बाहरी डिस्प्ले कनेक्टेड</string>
+    <string name="dex_status_disconnected">कोई बाहरी डिस्प्ले नहीं</string>
+    <string name="dex_status_starting">DeX शुरू हो रहा है...</string>
+    <string name="dex_status_stopping">DeX बंद हो रहा है...</string>
+
+    <!-- Confirmation Dialog -->
+    <string name="confirm_dex_title">DeX मोड शुरू करें?</string>
+    <string name="confirm_dex_message">एक बाहरी डिस्प्ले का पता चला। क्या आप उस डिस्प्ले पर DeX मोड शुरू करना चाहते हैं?</string>
+    <string name="confirm_dex_yes">हाँ, DeX शुरू करें</string>
+    <string name="confirm_dex_no">नहीं, धन्यवाद</string>
+    <string name="confirm_dex_dont_ask">फिर मत पूछना</string>
+
+    <!-- Wireless -->
+    <string name="wireless_connect">वायरलेस कनेक्ट करें</string>
+    <string name="wireless_connecting">कास्ट स्क्रीन खुल रही है...</string>
+    <string name="wireless_guidance">कनेक्ट करने के बाद, बेहतर अनुभव के लिए ब्लूटूथ कीबोर्ड/माउस पेयर करें।</string>
+    <string name="wireless_no_display">कोई एक्सटेंडेड डिस्प्ले नहीं मिला। आपका डिवाइस केवल मिररिंग सपोर्ट कर सकता है।</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">DeX मोड सेटअप</string>
+    <string name="onboarding_step_dev_options">डेवलपर ऑप्शन चालू करें</string>
+    <string name="onboarding_step_dev_options_desc">सेटिंग्स -> फोन के बारे में -> बिल्ड नंबर पर 7 बार टैप करें</string>
+    <string name="onboarding_step_wireless_debug">वायरलेस डिबगिंग चालू करें</string>
+    <string name="onboarding_step_wireless_debug_desc">सेटिंग्स -> डेवलपर ऑप्शन -> वायरलेस डिबगिंग -> चालू करें</string>
+    <string name="onboarding_step_pair">पेयरिंग कोड से पेयर करें</string>
+    <string name="onboarding_step_pair_desc">"पेयरिंग कोड से पेयर करें" पर टैप करें और नीचे कोड डालें</string>
+    <string name="onboarding_step_connect">ADB कनेक्ट करें</string>
+    <string name="onboarding_step_connect_desc">ऐप स्वचालित रूप से localhost:5555 से कनेक्ट करेगा</string>
+    <string name="onboarding_step_freeform">फ्रीफॉर्म विंडोज चालू करें</string>
+    <string name="onboarding_step_freeform_desc">ऐप ADB के जरिए जरूरी सेटिंग्स सेट करेगा</string>
+    <string name="onboarding_step_verify">सेटअप वेरिफाई करें</string>
+    <string name="onboarding_step_verify_desc">पुष्टि करें कि फ्रीफॉर्म विंडोज एक्सटर्नल डिस्प्ले पर काम करते हैं</string>
+    <string name="onboarding_step_permissions">अनुमतियाँ दें</string>
+    <string name="onboarding_step_permissions_desc">नोटिफिकेशन, बैटरी ऑप्टिमाइज़ेशन छूट दें</string>
+    <string name="onboarding_next">आगे</string>
+    <string name="onboarding_skip">छोड़ें</string>
+    <string name="onboarding_done">हो गया</string>
+
+    <!-- Taskbar -->
+    <string name="taskbar_start">शुरू</string>
+    <string name="taskbar_search_hint">ऐप्स खोजें...</string>
+    <string name="taskbar_running_apps">चल रहे ऐप्स</string>
+    <string name="taskbar_pinned_apps">पिन किए गए</string>
+    <string name="taskbar_tray_wifi">वाई-फाई</string>
+    <string name="taskbar_tray_battery">बैटरी</string>
+    <string name="taskbar_tray_clock">घड़ी</string>
+
+    <!-- Window Controls -->
+    <string name="window_minimize">न्यूनतम करें</string>
+    <string name="window_maximize">अधिकतम करें</string>
+    <string name="window_restore">पुनर्स्थापित करें</string>
+    <string name="window_close">बंद करें</string>
+
+    <!-- Settings -->
+    <string name="settings_title">DeX सेटिंग्स</string>
+    <string name="settings_performance_mode">परफॉरमेंस मोड</string>
+    <string name="settings_performance_auto">ऑटो (सुझाया गया)</string>
+    <string name="settings_performance_full">हमेशा फुल क्वालिटी</string>
+    <string name="settings_performance_reduced">हमेशा कम</string>
+    <string name="settings_auto_start">डिस्प्ले कनेक्ट पर ऑटो-स्टार्ट</string>
+    <string name="settings_show_confirmation">पुष्टिकरण डायलॉग दिखाएं</string>
+    <string name="settings_language">भाषा</string>
+    <string name="settings_about">इसके बारे में</string>
+    <string name="settings_version">संस्करण 1.0</string>
+
+    <!-- Errors -->
+    <string name="error_no_display">कोई बाहरी डिस्प्ले नहीं मिला</string>
+    <string name="error_adb_connection">ADB कनेक्ट करने में विफल। वायरलेस डिबगिंग चालू करें।</string>
+    <string name="error_adb_command">ADB कमांड विफल: %1$s</string>
+    <string name="error_permission_denied">अनुमति अस्वीकृत: %1$s</string>
+    <string name="error_freeform_not_supported">इस डिवाइस पर फ्रीफॉर्म विंडोज सपोर्टेड नहीं</string>
+    <string name="error_mirror_only">डिवाइस केवल मिररिंग सपोर्ट करता है, एक्सटेंडेड डेस्कटॉप नहीं</string>
+
+    <!-- Toasts -->
+    <string name="toast_dex_started">DeX बाहरी डिस्प्ले पर शुरू हुआ</string>
+    <string name="toast_dex_stopped">DeX बंद हुआ</string>
+    <string name="toast_display_connected">डिस्प्ले कनेक्टेड</string>
+    <string name="toast_display_disconnected">डिस्प्ले डिस्कनेक्टेड</string>
+    <string name="toast_adb_connected">ADB कनेक्टेड</string>
+    <string name="toast_adb_disconnected">ADB डिस्कनेक्टेड</string>
+    <string name="toast_freeform_enabled">फ्रीफॉर्म विंडोज चालू हुए</string>
+    <string name="toast_settings_saved">सेटिंग्स सेव हुईं</string>
+</resources>

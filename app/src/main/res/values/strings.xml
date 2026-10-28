@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">DeX Mode</string>
+    <string name="app_name_full">Desktop Experience</string>
+
+    <!-- Main Screen -->
+    <string name="start_dex">Start DeX</string>
+    <string name="stop_dex">Stop DeX</string>
+    <string name="dex_status_ready">Ready to connect</string>
+    <string name="dex_status_connected">External display connected</string>
+    <string name="dex_status_disconnected">No external display</string>
+    <string name="dex_status_starting">Starting DeX...</string>
+    <string name="dex_status_stopping">Stopping DeX...</string>
+
+    <!-- Confirmation Dialog -->
+    <string name="confirm_dex_title">Start DeX Mode?</string>
+    <string name="confirm_dex_message">An external display was detected. Do you want to start DeX mode on that display?</string>
+    <string name="confirm_dex_yes">Yes, Start DeX</string>
+    <string name="confirm_dex_no">No, Thanks</string>
+    <string name="confirm_dex_dont_ask">Do not ask again</string>
+
+    <!-- Wireless -->
+    <string name="wireless_connect">Connect Wirelessly</string>
+    <string name="wireless_connecting">Opening cast screen...</string>
+    <string name="wireless_guidance">After connecting, ensure Bluetooth keyboard/mouse are paired for best experience.</string>
+    <string name="wireless_no_display">No extended display detected. Your device may only support mirroring.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Setup DeX Mode</string>
+    <string name="onboarding_step_dev_options">Enable Developer Options</string>
+    <string name="onboarding_step_dev_options_desc">Go to Settings -> About Phone -> Tap Build Number 7 times</string>
+    <string name="onboarding_step_wireless_debug">Enable Wireless Debugging</string>
+    <string name="onboarding_step_wireless_debug_desc">Settings -> Developer Options -> Wireless Debugging -> Turn ON</string>
+    <string name="onboarding_step_pair">Pair with Pairing Code</string>
+    <string name="onboarding_step_pair_desc">Tap "Pair with pairing code" and enter the code below</string>
+    <string name="onboarding_step_connect">Connect ADB</string>
+    <string name="onboarding_step_connect_desc">App will connect to localhost:5555 automatically</string>
+    <string name="onboarding_step_freeform">Enable Freeform Windows</string>
+    <string name="onboarding_step_freeform_desc">App will set required system settings via ADB</string>
+    <string name="onboarding_step_verify">Verify Setup</string>
+    <string name="onboarding_step_verify_desc">Confirm freeform windows work on external display</string>
+    <string name="onboarding_step_permissions">Grant Permissions</string>
+    <string name="onboarding_step_permissions_desc">Allow notifications, battery optimization exemption</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_done">Done</string>
+
+    <!-- Taskbar -->
+    <string name="taskbar_start">Start</string>
+    <string name="taskbar_search_hint">Search apps...</string>
+    <string name="taskbar_running_apps">Running Apps</string>
+    <string name="taskbar_pinned_apps">Pinned</string>
+    <string name="taskbar_tray_wifi">Wi-Fi</string>
+    <string name="taskbar_tray_battery">Battery</string>
+    <string name="taskbar_tray_clock">Clock</string>
+
+    <!-- Window Controls -->
+    <string name="window_minimize">Minimize</string>
+    <string name="window_maximize">Maximize</string>
+    <string name="window_restore">Restore</string>
+    <string name="window_close">Close</string>
+
+    <!-- Settings -->
+    <string name="settings_title">DeX Settings</string>
+    <string name="settings_performance_mode">Performance Mode</string>
+    <string name="settings_performance_auto">Auto (Recommended)</string>
+    <string name="settings_performance_full">Always Full Quality</string>
+    <string name="settings_performance_reduced">Always Reduced</string>
+    <string name="settings_auto_start">Auto-start on Display Connect</string>
+    <string name="settings_show_confirmation">Show Confirmation Dialog</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version 1.0</string>
+
+    <!-- Errors -->
+    <string name="error_no_display">No external display found</string>
+    <string name="error_adb_connection">Failed to connect ADB. Ensure wireless debugging is enabled.</string>
+    <string name="error_adb_command">ADB command failed: %1$s</string>
+    <string name="error_permission_denied">Permission denied: %1$s</string>
+    <string name="error_freeform_not_supported">Freeform windows not supported on this device</string>
+    <string name="error_mirror_only">Device only supports mirroring, not extended desktop</string>
+
+    <!-- Toasts -->
+    <string name="toast_dex_started">DeX started on external display</string>
+    <string name="toast_dex_stopped">DeX stopped</string>
+    <string name="toast_display_connected">Display connected</string>
+    <string name="toast_display_disconnected">Display disconnected</string>
+    <string name="toast_adb_connected">ADB connected</string>
+    <string name="toast_adb_disconnected">ADB disconnected</string>
+    <string name="toast_freeform_enabled">Freeform windows enabled</string>
+    <string name="toast_settings_saved">Settings saved</string>
+</resources>
