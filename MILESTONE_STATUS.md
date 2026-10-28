@@ -1,9 +1,45 @@
 # DeX App Milestone Status
 
-## Current Status: M1 - Desktop Environment (COMPLETE ✓)
+## Current Status: M1 - Desktop Environment (FIXED, AWAITING DEVICE RETEST)
 
-### Build Status: **SUCCESSFUL**
-The project compiles and builds successfully with full Compose desktop environment!
+### Build Status: **CODE FIXED – NOT YET RE-VERIFIED ON DEVICE**
+M1 code built, but manual Start DeX crashed on device. Root cause found
+2026-10-28 (see "M1 manual-start crash fix" below) and fixed in code.
+M1 is NOT complete again until the retest steps below pass on a real
+device. Do not mark it COMPLETE on a compile alone.
+
+### M1 manual-start crash fix (2026-10-28)
+Symptom: M0 manual start worked; after the M1 Compose desktop landed,
+tapping Start DeX crashed the app, and later taps did nothing.
+Root causes, all in the manual path MainActivity → DisplayWatcherService
+→ DesktopShellActivity → Presentation + ComposeView:
+1. `DesktopPresentation` only set `ViewTreeLifecycleOwner` on its
+   ComposeView. A ComposeView outside an Activity/Fragment needs ALL
+   ViewTree owners. The saved-state dependency was added to Gradle but
+   never wired in code, so composition could throw
+   IllegalStateException as soon as it attached on the external display.
+   Fix: Presentation now implements LifecycleOwner +
+   SavedStateRegistryOwner + OnBackPressedDispatcherOwner, sets all
+   three owners before `setContent`, uses the Presentation (not the
+   phone Activity) as the ComposeView context, disposes on lifecycle
+   destroy, and drives its lifecycle down in `onStop()`.
+2. `DisplayWatcherService.isDexRunning` was set to true before launch
+   and never cleared when the shell died, so after a crash every later
+   Start DeX tap was silently ignored ("DeX already running"). Fix:
+   `startDexOnDisplay` now resets the flag if `startActivity` throws,
+   and `DesktopShellActivity` broadcasts `ACTION_DEX_STOPPED` on
+   destroy, which the service now listens for and clears.
+3. Manual fallback (flowchart purple branch) did not exist in the UI:
+   with no display detected, the button just opened cast settings.
+   Fix: with no display, MainActivity now asks Wired (rescan) or
+   Wireless (cast screen); rescan checks `DisplayWatcher.scan()`
+   synchronously and starts DeX directly if a display is found.
+   `startDex` now uses `startForegroundService` (Android 12+ safe)
+   in MainActivity and DexConfirmationActivity.
+Files changed: DesktopShellActivity.kt (rewrite of the Presentation
+host), DisplayWatcherService.kt, MainActivity.kt,
+DexConfirmationActivity.kt, values/strings.xml, values-hi/strings.xml,
+README.md (build + logcat steps).
 
 ### APK Location
 `D:\dex\DexApp\app\build\outputs\apk\debug\app-debug.apk` (~59 MB)
@@ -48,8 +84,18 @@ The project compiles and builds successfully with full Compose desktop environme
 9. Local.properties - ✓ Created (SDK path)
 10. build.gradle.kts - ✓ Added `buildFeatures { compose = true }`
 
-### Next Steps for Testing
-1. **Install on device**: `adb install D:\dex\DexApp\app\build\outputs\apk\debug\app-debug.apk`
+### Retest after the fix (do this before calling M1 complete again)
+1. Rebuild in Android Studio and install the new debug APK.
+2. With NO display: open the app, tap the action button → you must
+   get the "Start DeX manually" choice (Wired rescan / Wireless cast),
+   not a crash and not a dead button.
+3. With a display connected: tap Start DeX → desktop must appear on
+   the external display (wallpaper + taskbar), with no crash.
+4. If it still crashes, capture logcat before reopening the app:
+   `adb logcat -d | findstr /C:"AndroidRuntime" /C:"DesktopShell" /C:"DisplayWatcher"`
+   and paste the `FATAL EXCEPTION` block – that block, not a
+   description, is what confirms the next fix.
+5. **Install on device**: `adb install D:\dex\DexApp\app\build\outputs\apk\debug\app-debug.apk`
 2. **Grant permissions**:
    - Foreground service permission (auto-granted for specialUse)
    - Draw over other apps (for Presentation)
@@ -81,4 +127,4 @@ The project compiles and builds successfully with full Compose desktop environme
 
 ---
 Last Updated: 2026-10-28
-Build Status: ✅ SUCCESSFUL
+Build Status: ⚠️ CODE FIXED, DEVICE RETEST PENDING
